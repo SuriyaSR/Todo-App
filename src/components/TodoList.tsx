@@ -1,14 +1,19 @@
 
-import type { Todo } from "../App";
+import { useContext } from "react";
 import DeleteButton from "./DeleteButton";
+import { TodosContext } from "../contexts/TodosContextProvider";
 
-type TodoListProps = {
-  todos: Todo[];
-  handleToggleTodo: (id: number) => void;
-  handleDeleteTodo: (id: number) => void;
-};
+export default function TodoList() {
+  const context = useContext(TodosContext);
+  if (!context) {
+    throw new Error("TodoList must be used within a TodosContextProvider");
+  } 
 
-export default function TodoList({todos, handleToggleTodo, handleDeleteTodo}: TodoListProps) {
+  const {
+    todos,
+    handleToggleTodo,
+    handleDeleteTodo,
+  } = context;
 
   return (
     <ul>
@@ -20,7 +25,7 @@ export default function TodoList({todos, handleToggleTodo, handleDeleteTodo}: To
       {todos.map((todo) => (
         <li key={todo.id} className="flex justify-between items-center px-8 h-[50px] text-[14px] cursor-pointer border-b border-black/[8%]" onClick={() => handleToggleTodo(todo.id)}>
           <span className={`${todo.completed ? 'line-through text-[#ccc]' : ''}`}>{todo.text}</span>
-          <DeleteButton id={todo.id} handleDeleteTodo={handleDeleteTodo}/>
+          <DeleteButton id={todo.id} onDeleteTodo={handleDeleteTodo} />
         </li>
       ))}
     </ul>
