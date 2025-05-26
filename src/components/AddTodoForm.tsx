@@ -1,15 +1,12 @@
-import { useContext, useState } from "react";
+import {  useState } from "react";
 import Button from "./Button";
-import { TodosContext } from "../contexts/TodosContextProvider";
+import { useTodosContext } from "../lib/hooks";
 
 export default function AddTodoForm() {
   
   const [todoText, setTodoText] = useState('');
-  const context = useContext(TodosContext);
-  if (!context) {
-    throw new Error("TodoList must be used within a TodosContextProvider");
-  } 
-  const {handleAddTodo} = context;
+ 
+  const {handleAddTodo} = useTodosContext();
   
   return (
     <form onSubmit={(e) => {
