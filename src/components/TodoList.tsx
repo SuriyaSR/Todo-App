@@ -11,7 +11,7 @@ export default function TodoList() {
   } = useTodosContext();
 
   return (
-    <ul>
+    <ul className="max-h-75 overflow-y-auto">
       {todos.length === 0 && (
         <li className="flex justify-center items-center h-full font-semibold">
           Start adding your todos!
