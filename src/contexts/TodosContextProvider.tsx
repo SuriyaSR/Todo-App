@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import type { Todo } from "../lib/types";
 
 type TodoContextProviderProps = {
@@ -18,23 +18,16 @@ export const TodosContext = createContext<TypeTodosContext | null>(null);
 
 export default function TodosContextProvider({children}: TodoContextProviderProps) {
 
-  // const initialTodos = [
-  //   {
-  //     id: 1,
-  //     text: 'Buy Groceries',
-  //     completed: false
-  //   },
-  //   {
-  //     id: 2,
-  //     text: 'Walk the dog',
-  //     completed: true
-  //   },
-  //   {
-  //     id: 3,
-  //     text: 'Do Laundry',
-  //     completed: false
-  //   }]; 
-    const [todos, setTodos] = useState<Todo[]>([]);
+  const getInitialTodos = () => {
+      const storedTodos = localStorage.getItem('todos');
+      if (storedTodos) {
+        return JSON.parse(storedTodos);
+      } else {
+        return [];
+      }
+    };
+
+    const [todos, setTodos] = useState<Todo[]>(getInitialTodos);
 
     //derived state for the number of todos
     const completedTodos = todos.filter((todo) => todo.completed).length;  
@@ -73,6 +66,11 @@ export default function TodosContextProvider({children}: TodoContextProviderProp
         });
       });
     }
+
+    // side effects
+    useEffect(() => {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }, [todos]);
     
   return (
     <TodosContext.Provider value={{
