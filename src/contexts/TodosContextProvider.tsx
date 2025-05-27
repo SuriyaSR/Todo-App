@@ -34,24 +34,25 @@ export default function TodosContextProvider({children}: TodoContextProviderProp
     const totalTodos = todos.length;
 
     const handleAddTodo = (todoText: string) => {
-      if(todos.length >= 5) {
-          alert('Log in to add more than 5 todos');
-          return;
-        } else {
-            setTodos((prevTodos) => {
-              return [...prevTodos, 
-                {
-                  id: prevTodos.length + 1, 
-                  text: todoText, 
-                  completed: false
-                }];
-          });
-        }    
+      setTodos((prevTodos) => {
+          return [...prevTodos, 
+            {
+              id: prevTodos.length + 1, 
+              text: todoText, 
+              completed: false
+            }];
+      });
     }
     const handleDeleteTodo = (id: number) => {
-      setTodos((prevTodos) => {
-        return prevTodos.filter((todo) => todo.id !== id);
-      });
+
+      const filteredTodos = todos.filter(todo => todo.id !== id);
+      // Reassign IDs
+      const updatedTodos = filteredTodos.map((todo, index) => ({
+        ...todo,
+        id: index + 1,
+      }));
+
+      setTodos(updatedTodos);
     }
     const handleToggleTodo = (id: number) => {
       setTodos((prevTodos) => {

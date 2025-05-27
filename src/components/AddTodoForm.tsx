@@ -11,6 +11,7 @@ export default function AddTodoForm() {
   return (
     <form onSubmit={(e) => {
         e.preventDefault();  
+        if (!todoText.trim()) return;
         handleAddTodo(todoText);      
         setTodoText('');    
     }}>
